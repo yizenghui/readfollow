@@ -44,7 +44,7 @@ func main() {
 	db.AutoMigrate(&Book{})
 	defer db.Close()
 
-	PostTask()
+	go PostTask()
 	// 启动就执行一次
 	SpiderBookJobTask()
 	syncUpdateList()
@@ -108,7 +108,7 @@ func syncBook(info data.Book) {
 		book.IsVIP = info.IsVIP
 		book.Total = info.Total
 		db.Save(&book)
-		fmt.Printf("%v  %v  %v\n", book.ID, book.Name, book.Chapter)
+		fmt.Printf("sp: %v  %v  %v\n", book.ID, book.Name, book.Chapter)
 	}
 
 }
@@ -136,7 +136,7 @@ func Publish() {
 		db.Save(&book)
 
 		if book.Chapter != "" && book.ChapterURL != "" {
-			client := rpc.NewClient("http://127.0.0.1:819/")
+			client := rpc.NewClient("http://47.92.130.14:819/")
 			var stub *Stub
 			client.UseService(&stub)
 			postBook := TransformBook(book)
@@ -145,7 +145,7 @@ func Publish() {
 				if err != nil {
 					fmt.Println(err)
 				} else {
-					fmt.Println(s)
+					fmt.Println("ss:", s)
 				}
 			}
 		}

@@ -98,9 +98,9 @@ func SynchroSave(str string) string {
 	book.Rank = GetRank(fansNum, 0, time.Now().Unix(), 0)
 	book.Save()
 
-	fmt.Println("print ", book.ID, book.Name, book.Chapter, book.Rank)
-	bookString, _ := json.Marshal(book)
-	return string(bookString)
+	// fmt.Println("print ", book.ID, book.Name, book.Chapter, book.Rank)
+	// bookString, _ := json.Marshal(book)
+	return fmt.Sprintf("%v %v %v", book.ID, book.Name, book.Chapter)
 }
 
 //GetRank 获取排名

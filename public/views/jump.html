@@ -1,0 +1,67 @@
+{{define "jump"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <title>Read Follow</title>
+        <!-- 引入 WeUI -->
+        <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
+    </head>
+    <body>
+        <!-- 使用 -->
+		<div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <em class="weui-form-preview__value" style="font-size:1.2em">{{.Chapter}}{{ if .IsVIP }} vip {{ end }}</em>
+                
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">书名</label>
+                    <span class="weui-form-preview__value">{{.Name}}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">作者</label>
+                    <span class="weui-form-preview__value">{{.Author}}</span>
+                </div>
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">首发</label>
+                    <span class="weui-form-preview__value"> {{.Posted}} </span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">作品字数</label>
+                    <span class="weui-form-preview__value">{{.Total}}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">缓存时间</label>
+                    <span class="weui-form-preview__value"> {{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</span>
+                </div>
+            </div>
+            <div class="weui-form-preview__ft">
+                {{ if .UnFollowBtm }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.UnFollowLink}}" rel="nofollow">弃追</a>
+                {{ end }}
+                {{ if .FollowBtm }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.FollowLink}}" rel="nofollow">追书</a>
+                {{ end }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="{{.JumpURL}}" rel="nofollow">前往查看</a>
+            </div>
+        </div>
+		
+		
+		<div class="page__bd page__bd_spacing">
+			<br>
+			<div class="weui-footer">
+				<!--<p class="weui-footer__links">
+					<a href="javascript:void(0);" class="weui-footer__link">关于我们</a>
+					<a href="javascript:void(0);" class="weui-footer__link">免责声名</a>
+					<a href="javascript:void(0);" class="weui-footer__link">侵权联系</a>
+				</p>-->
+				<p class="weui-footer__text">Copyright &copy; 2017 <!--readfollow.com--></p>
+			</div>
+			<br>
+		</div>
+    </body>
+</html>
+{{end}}

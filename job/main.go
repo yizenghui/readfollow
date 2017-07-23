@@ -44,7 +44,7 @@ func main() {
 	db.AutoMigrate(&Book{})
 	defer db.Close()
 
-	go PostTask()
+	// go PostTask()
 	// 启动就执行一次
 	SpiderBookJobTask()
 	syncUpdateList()

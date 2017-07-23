@@ -115,7 +115,7 @@ func syncBook(info data.Book) {
 
 //PostTask 同步任务
 func PostTask() {
-	ticker := time.NewTicker(time.Second * 2)
+	ticker := time.NewTicker(time.Millisecond * 500)
 	for _ = range ticker.C {
 		go Publish()
 	}
@@ -142,6 +142,7 @@ func Publish() {
 			postBook := TransformBook(book)
 			if jsonStr, err := json.Marshal(postBook); err == nil {
 				s, err := stub.Save(string(jsonStr))
+				client.Close()
 				if err != nil {
 					fmt.Println(err)
 				} else {

@@ -28,8 +28,17 @@ func Test_GetMenu(t *testing.T) {
 		Name: "我的关注",
 		Key:  "myfollow",
 	}
-
-	buttons = append(buttons, but1)
+	but2 := menu.Button{
+		Type: "click",
+		Name: "搜索书籍",
+		Key:  "find",
+	}
+	but3 := menu.Button{
+		Type: "click",
+		Name: "最近更新",
+		Key:  "new",
+	}
+	buttons = append(buttons, but1, but2, but3)
 	fmt.Println(buttons)
 	// newMenu := &menu.Menu{
 	// 	Buttons: buttons,

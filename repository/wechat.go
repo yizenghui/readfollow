@@ -89,6 +89,19 @@ func menuClickEventHandler(ctx *core.Context) {
 		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 		ctx.RawResponse(resp)
 
+	case "new":
+
+		rc := fmt.Sprintf(`<a href="http://readfollow.com/new?open_id=%v">最近更新</a>`, user.OpenID)
+		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
+		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
+		ctx.RawResponse(resp)
+
+	case "find":
+		rc := fmt.Sprintf(`<a href="http://readfollow.com/find?open_id=%v">搜索书籍</a>`, user.OpenID)
+		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
+		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
+		ctx.RawResponse(resp)
+
 	default:
 		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, "Please look forward to more features!")
 		ctx.RawResponse(resp)

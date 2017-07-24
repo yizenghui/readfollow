@@ -44,7 +44,7 @@ func main() {
 	db.AutoMigrate(&Book{})
 	defer db.Close()
 
-	// go PostTask()
+	go PostTask()
 	// 启动就执行一次
 	SpiderBookJobTask()
 	syncUpdateList()
@@ -133,23 +133,26 @@ func Publish() {
 	db.Where("publish_at = 0").First(&book)
 	if book.ID > 0 {
 		book.PublishAt = time.Now().Unix()
-		db.Save(&book)
 
 		if book.Chapter != "" && book.ChapterURL != "" {
-			client := rpc.NewClient("http://47.92.130.14:819/")
+			// client := rpc.NewClient("http://47.92.130.14:819/")
+			client := rpc.NewClient("http://47.92.130.14:80/rpc")
 			var stub *Stub
 			client.UseService(&stub)
 			postBook := TransformBook(book)
+			defer client.Close()
 			if jsonStr, err := json.Marshal(postBook); err == nil {
 				s, err := stub.Save(string(jsonStr))
-				client.Close()
 				if err != nil {
+					book.PublishAt = -1
 					fmt.Println(err)
 				} else {
+					book.PublishAt = time.Now().Unix()
 					fmt.Println("ss:", s)
 				}
 			}
 		}
+		db.Save(&book)
 	}
 }
 

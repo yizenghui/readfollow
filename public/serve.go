@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/hprose/hprose-golang/rpc"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo"
 	"github.com/yizenghui/readfollow/conf"
@@ -132,7 +133,7 @@ func init() {
 func main() {
 
 	// 开启rpc同步任务
-	go repository.RPCServeStart(":819")
+	// go repository.RPCServeStart(":819")
 
 	t := &Template{
 		templates: template.Must(template.ParseGlob("views/*.html")),
@@ -141,6 +142,10 @@ func main() {
 	e := echo.New()
 	e.Renderer = t
 	// e.Static("/static", "../assets")
+
+	service := rpc.NewHTTPService()
+	service.AddFunction("Save", repository.SynchroSave)
+	e.Any("/rpc", echo.WrapHandler(service))
 
 	// e.GET("/", Home)
 	e.GET("/u/:id", User)

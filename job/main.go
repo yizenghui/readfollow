@@ -13,6 +13,12 @@ import (
 	"github.com/yizenghui/sda/data"
 )
 
+//Stub rpc 服务器提供接口
+type Stub struct {
+	Save      func(string) (string, error)
+	AsyncSave func(func(string, error), string) `name:"Save"`
+}
+
 // Book 书籍模型
 type Book struct {
 	gorm.Model
@@ -30,6 +36,8 @@ type Book struct {
 
 var db *gorm.DB
 
+var stub *Stub
+
 func main() {
 
 	var err error
@@ -43,6 +51,11 @@ func main() {
 	// 自动迁移模式
 	db.AutoMigrate(&Book{})
 	defer db.Close()
+
+	client := rpc.NewClient("http://47.92.130.14:80/rpc")
+	// client := rpc.NewClient("http://127.0.0.1:8080/rpc")
+	client.UseService(&stub)
+	defer client.Close()
 
 	go PostTask()
 	// 启动就执行一次
@@ -121,12 +134,6 @@ func PostTask() {
 	}
 }
 
-//Stub rpc 服务器提供接口
-type Stub struct {
-	Save      func(string) (string, error)
-	AsyncSave func(func(string, error), string) `name:"Save"`
-}
-
 // Publish 发布
 func Publish() {
 	var book Book
@@ -136,11 +143,8 @@ func Publish() {
 
 		if book.Chapter != "" && book.ChapterURL != "" {
 			// client := rpc.NewClient("http://47.92.130.14:819/")
-			client := rpc.NewClient("http://47.92.130.14:80/rpc")
-			var stub *Stub
-			client.UseService(&stub)
+
 			postBook := TransformBook(book)
-			defer client.Close()
 			if jsonStr, err := json.Marshal(postBook); err == nil {
 				s, err := stub.Save(string(jsonStr))
 				if err != nil {

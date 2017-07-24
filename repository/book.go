@@ -10,6 +10,13 @@ import (
 	"github.com/yizenghui/sda"
 )
 
+// SeoTag seo 标签
+type SeoTag struct {
+	Title       string
+	Description string
+	Keywords    string
+}
+
 // Book 所用数据包
 type Book struct {
 	ID           uint
@@ -29,6 +36,7 @@ type Book struct {
 type NewBook struct {
 	Books     []Book
 	NotUpdate bool
+	SeoTag
 }
 
 //GetNewBook 获取最新更新书籍
@@ -52,6 +60,9 @@ func GetNewBook(openID string) NewBook {
 		data.NotUpdate = true
 	}
 
+	data.Title = fmt.Sprintf("跟读最新章节")
+	data.Description = fmt.Sprintf("跟读最新更新小说列表")
+	data.Keywords = fmt.Sprintf("%v,%v", "跟读", "最新章节")
 	return data
 }
 
@@ -79,6 +90,7 @@ type BookInfo struct {
 	FollowLink   string
 	JumpURL      string
 	Posted       string
+	SeoTag
 }
 
 //GetBookInfo 获取书籍详细
@@ -124,6 +136,9 @@ func GetBookInfo(id int, openID string) (BookInfo, error) {
 		}
 	}
 
+	data.Title = fmt.Sprintf("跟读%v最新章节%v", data.Name, data.Chapter)
+	data.Description = fmt.Sprintf("%v是%v发布于%v的小说,目前最新章节%v", data.Name, data.Author, data.Posted, data.Chapter)
+	data.Keywords = fmt.Sprintf("%v,%v", data.Name, data.Author)
 	return data, nil
 }
 
@@ -153,6 +168,24 @@ func FindBook(url string) (model.Book, error) {
 		return book, nil
 	}
 	return book, errors.New("找不到相关书籍")
+}
+
+//FindGuide 搜索引导数据
+type FindGuide struct {
+	OpenID string
+	SeoTag
+}
+
+//FindGuideData 搜索页SEO
+func FindGuideData(openID string) FindGuide {
+
+	data := FindGuide{}
+	data.OpenID = openID
+	data.Title = "搜索书籍 跟读"
+	data.Keywords = "跟读,搜索"
+	data.Description = "搜索书籍更新信息"
+
+	return data
 }
 
 // SearchBook 通过关键字获取书籍信息

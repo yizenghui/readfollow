@@ -1,13 +1,7 @@
 {{define "find"}}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-        <title>Read Follow</title>
-        <!-- 引入 WeUI -->
-        <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
-    </head>
+     {{template "head" .}}
     <body>
         <!-- 使用 -->
 		<div class="page">
@@ -19,7 +13,7 @@
         <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
         <div class="weui-search-bar" id="searchBar">
             <form class="weui-search-bar__form" action="/find">
-                <input type="hidden" name="open_id" value="{{.}}"/>
+                <input type="hidden" name="open_id" value="{{.OpenID}}"/>
                 <div class="weui-search-bar__box">
                     <i class="weui-icon-search"></i>
                     <input type="search" name="q" class="weui-search-bar__input" id="searchInput" placeholder="限起点、纵横、17K书页" required autocomplete="off"/>
@@ -110,18 +104,7 @@
 </script>
 		
 		
-		<div class="page__bd page__bd_spacing">
-			<br>
-			<div class="weui-footer">
-				<!--<p class="weui-footer__links">
-					<a href="javascript:void(0);" class="weui-footer__link">关于我们</a>
-					<a href="javascript:void(0);" class="weui-footer__link">免责声名</a>
-					<a href="javascript:void(0);" class="weui-footer__link">侵权联系</a>
-				</p>-->
-				<p class="weui-footer__text">Copyright &copy; 2017 <!--readfollow.com--></p>
-			</div>
-			<br>
-		</div>
+		 {{template "footer" .}}
     </body>
 </html>
 {{end}}

@@ -17,6 +17,7 @@ type User struct {
 	Head      string
 	Books     []Book
 	NotFollow bool
+	SeoTag
 }
 
 //GetUser 获取最新更新书籍
@@ -60,6 +61,10 @@ func GetUser(id int, openID string) (User, error) {
 
 		}
 	}
+	data.Title = fmt.Sprintf("%v正在跟读", data.Nickname)
+	data.Description = fmt.Sprintf("%v跟读的书籍。", data.Nickname)
+	data.Keywords = fmt.Sprintf("%v,跟读", data.Nickname)
+
 	return data, nil
 }
 

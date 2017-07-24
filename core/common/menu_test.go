@@ -40,10 +40,10 @@ func Test_GetMenu(t *testing.T) {
 	}
 	buttons = append(buttons, but1, but2, but3)
 	fmt.Println(buttons)
-	// newMenu := &menu.Menu{
-	// 	Buttons: buttons,
-	// }
-	// menu.Create(clt, newMenu)
+	newMenu := &menu.Menu{
+		Buttons: buttons,
+	}
+	menu.Create(clt, newMenu)
 	// menu.Menu{}
 	// OpenID := "xsasxa"
 	// var wxAppID = "wx702b93aef72f3549"

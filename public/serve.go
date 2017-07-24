@@ -99,7 +99,8 @@ func Find(c echo.Context) error {
 			}
 		}
 	}
-	return c.Render(http.StatusOK, "find", openID)
+	data := repository.FindGuideData(openID)
+	return c.Render(http.StatusOK, "find", data)
 
 }
 

@@ -11,6 +11,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo"
 	"github.com/yizenghui/readfollow/conf"
+	"github.com/yizenghui/readfollow/model"
 	"github.com/yizenghui/readfollow/repository"
 	"github.com/yizenghui/sda/code"
 )
@@ -128,6 +129,7 @@ func echoWxCallbackHandler(c echo.Context) error {
 
 func init() {
 	conf.InitConfig("../conf/conf.toml")
+	model.DB().AutoMigrate(&model.Book{})
 }
 
 func main() {

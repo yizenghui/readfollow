@@ -18,6 +18,8 @@ func init() {
 
 func Test_GetBook(t *testing.T) {
 	var book Book
+	// DB().AutoMigrate(&Book{})
+
 	DB().First(&book, 1)
 	users := book.GetFollowUser()
 	fmt.Println(users)

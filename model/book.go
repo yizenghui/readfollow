@@ -6,7 +6,7 @@ import "time"
 type Book struct {
 	ID         uint `gorm:"primary_key"`
 	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	UpdatedAt  time.Time  `sql:"index"`
 	DeletedAt  *time.Time `sql:"index"`
 	Name       string     `gorm:"size:255"`
 	Chapter    string     `gorm:"size:255"`

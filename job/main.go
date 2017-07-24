@@ -120,6 +120,7 @@ func syncBook(info data.Book) {
 		book.BookURL = info.BookURL
 		book.IsVIP = info.IsVIP
 		book.Total = info.Total
+		book.PublishAt = 0
 		db.Save(&book)
 		fmt.Printf("sp: %v  %v  %v\n", book.ID, book.Name, book.Chapter)
 	}
@@ -151,7 +152,6 @@ func Publish() {
 					book.PublishAt = -1
 					fmt.Println(err)
 				} else {
-					book.PublishAt = time.Now().Unix()
 					fmt.Println("ss:", s)
 				}
 			}

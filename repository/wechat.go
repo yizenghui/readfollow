@@ -64,7 +64,7 @@ func menuClickEventHandler(ctx *core.Context) {
 
 	event := menu.GetClickEvent(ctx.MixedMsg)
 
-	// log.Println(event.EventKey)
+	log.Println(event.EventKey)
 
 	fans, _ := common.GetFans(event.FromUserName)
 	// event.FromUserName

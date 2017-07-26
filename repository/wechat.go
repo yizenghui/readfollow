@@ -113,6 +113,14 @@ func menuClickEventHandler(ctx *core.Context) {
 }
 
 func defaultEventHandler(ctx *core.Context) {
+
+	event := menu.GetScanCodePushEvent(ctx.MixedMsg)
+
+	rc := fmt.Sprintf(`todo %v`, event.EventKey)
+	resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
+	// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
+	ctx.RawResponse(resp)
+
 	log.Printf("收到事件:\n%s\n", ctx.MsgPlaintext)
 	ctx.NoneResponse()
 }

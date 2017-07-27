@@ -116,6 +116,8 @@ func defaultEventHandler(ctx *core.Context) {
 
 	event := menu.GetScanCodePushEvent(ctx.MixedMsg)
 
+	SetWebGetSignTaskValueForWechatPush(event.EventKey, event.FromUserName)
+
 	rc := fmt.Sprintf(`todo %v`, event.EventKey)
 	resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 	// ctx.AESResponse(resp, 0, "", nil) // aes密文回复

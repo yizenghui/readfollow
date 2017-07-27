@@ -128,6 +128,36 @@ func echoWxCallbackHandler(c echo.Context) error {
 	return err
 }
 
+//Sign sign
+func Sign(c echo.Context) error {
+	callback := c.QueryParam("callback")
+	data, err := repository.CreateWebGetSignTask(callback)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// fmt.Println(data)
+	return c.Render(http.StatusOK, "sign", data)
+}
+
+// CheckSign Check Sign
+func CheckSign(c echo.Context) error {
+	id, _ := strconv.Atoi(c.QueryParam("id"))
+	val, err := repository.GetWebGetSignTaskValue(int32(id))
+	if err != nil {
+		repository.RemoveSignTask(int32(id))
+	}
+	return c.JSON(http.StatusOK, val)
+}
+
+// SaveSign test...
+func SaveSign(c echo.Context) error {
+	id, _ := strconv.Atoi(c.QueryParam("id"))
+	openID := c.QueryParam("open_id")
+	repository.SetTaskValue(int32(id), openID)
+	data, _ := repository.GetWebGetSignTaskValue(int32(id))
+	return c.JSON(http.StatusOK, data)
+}
+
 func init() {
 	conf.InitConfig("../conf/conf.toml")
 	model.DB().AutoMigrate(&model.Book{})
@@ -157,6 +187,10 @@ func main() {
 	e.GET("/follow/:id", Follow)
 	e.GET("/unfollow/:id", Unfollow)
 	e.GET("/search", Search)
+	e.GET("/sign", Sign)
+	e.GET("/savesign", SaveSign) //测试写入签名
+
+	e.GET("/validate", CheckSign)
 	e.GET("/find", Find)
 	e.GET("/hello", Hello)
 	// e.GET("/hot", Hello)

@@ -143,8 +143,8 @@ func Sign(c echo.Context) error {
 func CheckSign(c echo.Context) error {
 	id, _ := strconv.Atoi(c.QueryParam("id"))
 	val, err := repository.GetWebGetSignTaskValue(int32(id))
-	if err != nil {
-		// repository.RemoveSignTask(int32(id))
+	if err == nil {
+		repository.RemoveSignTask(int32(id))
 	}
 	return c.JSON(http.StatusOK, val)
 }

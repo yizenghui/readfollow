@@ -5,7 +5,7 @@ release_mode = false
 [app]
 name = "Read Follow"
 port = ":8080"
-
+host = "47.92.130.14"
 
 [database]
 type = "postgres"

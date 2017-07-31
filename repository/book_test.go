@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/yizenghui/readfollow/conf"
+	"github.com/yizenghui/readfollow/core/event"
+	"github.com/yizenghui/readfollow/model"
 )
 
 func init() {
@@ -28,4 +30,13 @@ func Test_GetBookInfo(t *testing.T) {
 func Test_FindBook(t *testing.T) {
 	data, err := FindBook("http://book.zongheng.com/book/652613.html")
 	fmt.Println(data, err)
+}
+
+func Test_NoticeFollow(t *testing.T) {
+	var book model.Book
+	book.GetBookByID(1)
+	users := book.GetFollowUser()
+	if users != nil {
+		event.BookUpdateNotice(book, users)
+	}
 }

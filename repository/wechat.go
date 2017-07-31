@@ -84,20 +84,20 @@ func menuClickEventHandler(ctx *core.Context) {
 
 	case "myfollow":
 
-		rc := fmt.Sprintf(`<a href="http://readfollow.com/u/%d?open_id=%v">%v的关注</a>`, user.ID, user.OpenID, user.Nickname)
+		rc := fmt.Sprintf(`<a href="http://%v/u/%d?open_id=%v">%v的关注</a>`, conf.Conf.App.Host, user.ID, user.OpenID, user.Nickname)
 		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 		ctx.RawResponse(resp)
 
 	case "new":
 
-		rc := fmt.Sprintf(`<a href="http://readfollow.com/new?open_id=%v">最近更新</a>`, user.OpenID)
+		rc := fmt.Sprintf(`<a href="http://%v/new?open_id=%v">最近更新</a>`, conf.Conf.App.Host, user.OpenID)
 		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 		ctx.RawResponse(resp)
 
 	case "find":
-		rc := fmt.Sprintf(`<a href="http://readfollow.com/find?open_id=%v">搜索书籍</a>`, user.OpenID)
+		rc := fmt.Sprintf(`<a href="http://%v/find?open_id=%v">搜索书籍</a>`, conf.Conf.App.Host, user.OpenID)
 		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 		ctx.RawResponse(resp)

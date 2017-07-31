@@ -30,6 +30,7 @@ type Config struct {
 
 type app struct {
 	Name string `toml:"name"`
+	Host string `toml:"host"`
 	Port string `toml:"port"`
 }
 

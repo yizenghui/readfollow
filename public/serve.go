@@ -175,7 +175,7 @@ func main() {
 	e := echo.New()
 	e.Renderer = t
 	// e.Static("/static", "../assets")
-
+	e.File("/favicon.ico", "images/favicon.ico")
 	service := rpc.NewHTTPService()
 	service.AddFunction("Save", repository.SynchroSave)
 	e.Any("/rpc", echo.WrapHandler(service))

@@ -18,8 +18,8 @@ type SignTask struct {
 }
 
 // CreateWebGetSignTask 站点获取签名任务
-func CreateWebGetSignTask(callback string) (SignTask, error) {
-	var st SignTask
+func CreateWebGetSignTask(callback string) (st SignTask, err error) {
+	// var st SignTask
 	st.ID = common.CreateTask()
 	qrcode, err := event.CreateTempQrcode(st.ID)
 	if err != nil {

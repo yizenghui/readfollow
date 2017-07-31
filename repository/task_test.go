@@ -16,7 +16,7 @@ func init() {
 }
 
 func Test_CreateWebGetSignTask(t *testing.T) {
-	data, err := CreateWebGetSignTask()
+	data, err := CreateWebGetSignTask("//as")
 	if err != nil {
 		fmt.Println(err)
 	}

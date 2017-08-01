@@ -30,6 +30,8 @@ type Book struct {
 	UnFollowLink string
 	FollowBtm    bool
 	FollowLink   string
+	Author       string
+	AuthorURL    string
 }
 
 // NewBook 最近更新的书籍
@@ -46,7 +48,7 @@ func GetNewBook(openID string) NewBook {
 	books := book.GetNewBooks()
 	if books != nil {
 		for _, b := range books {
-			dbo := Book{ID: b.ID, Name: b.Name, Chapter: b.Chapter, UpdatedAt: b.UpdatedAt}
+			dbo := Book{ID: b.ID, Name: b.Name, Chapter: b.Chapter, UpdatedAt: b.UpdatedAt, Author: b.Author, AuthorURL: b.AuthorURL}
 			if openID != "" {
 				dbo.URL = fmt.Sprintf("/s/%d?open_id=%v", b.ID, openID)
 			} else {

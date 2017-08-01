@@ -1,51 +1,106 @@
 {{define "jump"}}
 <!DOCTYPE html>
 <html lang="en">
-    {{template "head" .}}
-    <body>
-        <!-- 使用 -->
-		<div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <em class="weui-form-preview__value" style="font-size:1.2em">{{.Chapter}}{{ if .IsVIP }} vip {{ end }}</em>
-                
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">书名</label>
-                    <span class="weui-form-preview__value">{{.Name}}</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">作者</label>
-                    <span class="weui-form-preview__value">{{.Author}}</span>
-                </div>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">首发</label>
-                    <span class="weui-form-preview__value"> {{.Posted}} </span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">作品字数</label>
-                    <span class="weui-form-preview__value">{{.Total}}</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">缓存时间</label>
-                    <span class="weui-form-preview__value"> {{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</span>
-                </div>
-            </div>
-            <div class="weui-form-preview__ft">
-                {{ if .UnFollowBtm }}
-                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.UnFollowLink}}" rel="nofollow">弃追</a>
-                {{ end }}
-                {{ if .FollowBtm }}
-                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.FollowLink}}" rel="nofollow">追书</a>
-                {{ end }}
-                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="{{.JumpURL}}" rel="nofollow">前往查看</a>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
+
+    <link rel="stylesheet" href="/static/css/docs.min.css">
+
+    <link rel="stylesheet" href="/static/css/docsearch.min.css" >
+
+    <link href="/static/css/navbar-top-fixed.css" rel="stylesheet">
+
+    <style>
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+</style>
+</head>
+  <body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">Fixed navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/new">New <span class="sr-only">(current)</span></a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="/hot" >Hot</a>
+          </li> -->
+        </ul>
+        <form class="form-inline mt-2 mt-md-0" action="/find">
+          <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+
+
+    <div id="toc"></div>
+
+    <div class="jumbotron container">
+        <h1 class="display-3" id="name">{{.Name}}</h1>
+        <p class="lead">{{.Chapter}}{{ if .IsVIP }} vip {{ end }}</p>
+        <hr class="my-4">
+        <p>{{.Author}} {{.Posted}} {{.Total}} {{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{{.JumpURL}}" rel="nofollow" role="button">前往查看</a>
+        </p>
+        {{ if .UnFollowBtm }}
+        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.UnFollowLink}}" rel="nofollow">弃追</a>
+        {{ end }}
+        {{ if .FollowBtm }}
+        <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.FollowLink}}" rel="nofollow">追书</a>
+        {{ end }}
+    </div>
+
+    <div class="container">
+
+        <h2 id="pill-badges">评论</h2>
+
+        <p>Use the <code class="highlighter-rouge">.badge-pill</code> modifier class to make badges more rounded (with a larger <code class="highlighter-rouge">border-radius</code> and additional horizontal <code class="highlighter-rouge">padding</code>). Useful if you miss the badges from v3.</p>
+
+
+        <div class="media">
+            <img class="d-flex mr-3 rounded-circle" src="http://wx.qlogo.cn/mmopen/I9Ur8libHdM7qNSKia1DkPG4yBpGoJfkpqMT0HeqnBTTYiakaHpZ0ypsgcksZBLKtCsH1hys0tNia6oKyLD5Yn8iaXicibgXZictMKsx/64" alt="Generic placeholder image">
+            <div class="media-body">
+                <h5 class="mt-0">Media heading</h5>
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
             </div>
         </div>
-		
-		
-		
-		 {{template "footer" .}}
-    </body>
+    </div>
+
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+
+        <script>window.jQuery || document.write('<script src="/static/js/jquery.min.js"><\/script>')</script>
+
+    <script src="/static/js/popper.min.js" ></script>
+    <script src="/static/js/bootstrap.min.js" ></script>
+        
+    <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="https://cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
+    <script>
+        // $('#toc').toc();
+    </script>
+    
+   
+
+  </body>
 </html>
+
 {{end}}

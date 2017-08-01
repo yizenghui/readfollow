@@ -1,44 +1,96 @@
 {{define "new"}}
+
+
 <!DOCTYPE html>
 <html lang="en">
-    {{template "head" .}}
-    <body>
-        <!-- 使用 -->
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <div class="weui-panel weui-panel_access">
-            
-            <div class="weui-panel__hd">
-                <h1 class="page__title">最近更新</h1>
-            </div>
-            <div class="weui-panel__bd">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
+
+    <link rel="stylesheet" href="/static/css/docs.min.css">
+
+    <link rel="stylesheet" href="/static/css/docsearch.min.css" >
+
+    <link href="/static/css/navbar-top-fixed.css" rel="stylesheet">
+
+    <style>
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+</style>
+</head>
+  <body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">Fixed navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/new">New <span class="sr-only">(current)</span></a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="/hot" >Hot</a>
+          </li> -->
+        </ul>
+        <form class="form-inline mt-2 mt-md-0" action="/find">
+          <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container">
+    <!-- Content here -->
+        <div class="card-columns">
             {{ if .NotUpdate }}
-                <div class="weui-media-box weui-media-box_text">
-                    <p class="weui-media-box__desc">没有任何书籍更新</p>
-                </div>
+            <h1 >没有任何书籍更新</h1>
             {{ else }}
-                {{ range .Books }}
-                <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title"><a href="{{.URL}}" class="weui-form-preview__btn_default">{{ .Name }}</a></h4>
-                    <p class="weui-media-box__desc">{{ .Chapter }}</p>
-                    <ul class="weui-media-box__info">
-                        {{ if .UnFollowBtm }}
-                        <li class="weui-media-box__info__meta "><a href="{{.UnFollowLink}}" rel="nofollow" class="weui-form-preview__btn_default">弃追</a></li>
-                        {{ end }}
-                        <li class="weui-media-box__info__meta"><a href="{{ .BookURL }}" rel="nofollow" class="weui-form-preview__btn_default">{{ .Posted }}</a></li>
-                        <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">{{ .UpdatedAt.Format "01-02 15:04" }}</li>
-                    </ul>
-                </div>
+
+            {{ range .Books }}
+            
+            <div class="card">
+                <div class="card-body">
+                <h4 class="card-title"><a href="{{.URL}}">{{ .Name }}</a></h4>
+                <p class="card-text">{{ .Chapter }}</p>
+                <p class="card-text"><small class="text-muted">{{ .UpdatedAt.Format "01-02 15:04" }}</small></p>
+                {{ if .UnFollowBtm }}
+                <a href="{{.UnFollowLink}}" rel="nofollow" class="card-link">弃追</a>
                 {{ end }}
-            {{ end }}
+                </div>
             </div>
+            
+                    
+
+            {{ end }}
+
+            {{ end }}
+                
         </div>
+    </div>
 
 
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+        <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery.min.js"><\/script>')</script>
+
+    <script src="/static/js/popper.min.js" ></script>
+    <script src="/static/js/bootstrap.min.js" ></script>
         
-        
-		
-		
-		 {{template "footer" .}}
-    </body>
+    <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+
+  </body>
 </html>
+
 {{end}}

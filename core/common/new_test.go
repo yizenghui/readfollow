@@ -9,10 +9,25 @@ import (
 	"sort"
 	"testing"
 	"time"
+
+	"github.com/yizenghui/readfollow/conf"
 )
 
-func init() {}
+func init() {
+	conf.InitConfig("../../conf/conf.toml")
 
+}
+
+func Test_NewBookSort(t *testing.T) {
+	newBooks := GetNewBooks()
+	newBooks2 := GetNewBooks()
+	fmt.Println(len(newBooks))
+	fmt.Println(len(newBooks2))
+}
+
+//----------
+// 二维码扫描任务
+//----------
 type Person struct {
 	Name string
 	Age  int
@@ -29,9 +44,9 @@ type ByAge []Person
 
 func (a ByAge) Len() int           { return len(a) }
 func (a ByAge) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByAge) Less(i, j int) bool { return a[i].Age > a[j].Age }
+func (a ByAge) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
-func Test_NewBookSort(t *testing.T) {
+func Test_NewPersonSort(t *testing.T) {
 
 	// toBeCharge := "2015-01-01 00:00:00"              //待转化为时间戳的字符串 注意 这里的小时和分钟还要秒必须写 因为是跟着模板走的 修改模板的话也可以不写
 	// timeLayout := "2006-01-02 15:04:05"              //转化所需模板
@@ -42,7 +57,9 @@ func Test_NewBookSort(t *testing.T) {
 	t3, _ := time.Parse("2006-01-02 15:04:05", "2015-01-03 00:00:00")
 	t4, _ := time.Parse("2006-01-02 15:04:05", "2015-01-04 00:00:00")
 
-	// fmt.Println(theTime)
+	fmt.Println("2016-05-10 09:30:29" > "2016-05-20 08:50:12")
+	fmt.Println(t3.Before(t2))
+
 	pm := Person{"Michael", 17, t1}
 
 	people := []Person{
@@ -54,7 +71,7 @@ func Test_NewBookSort(t *testing.T) {
 
 	fmt.Println(pm)
 	fmt.Println(people)
-	sort.Sort(sort.Reverse(ByAge(people))) // 反序
+	// sort.Sort(sort.Reverse(ByAge(people))) // 反序
 	sort.Sort(ByAge(people))
 	// sort.Reverse(ByAge(people))
 	// delete(people, 1) 这个只能删除键

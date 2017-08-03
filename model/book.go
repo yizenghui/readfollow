@@ -40,6 +40,13 @@ func (book *Book) GetNewBooks() []Book {
 	return books
 }
 
+// GetHotBooks 获取最热100本书
+func (book *Book) GetHotBooks() []Book {
+	var books []Book
+	DB().Limit(100).Order("rank Desc").Find(&books)
+	return books
+}
+
 // GetBookByURL 通过url获取书籍信息 如果没有的话进行初始化 注：没有地址相同的两本书
 func (book *Book) GetBookByURL(url string) {
 	DB().Where(Book{BookURL: url}).FirstOrInit(book)

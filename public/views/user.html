@@ -5,37 +5,51 @@
     <body>
         <!-- 使用 -->
 
-        <div class="weui-panel weui-panel_access">
-            
-            <div class="weui-panel__hd">
-                <h1 class="page__title">{{ .Nickname }}の跟读</h1>
-            </div>
-            <div class="weui-panel__bd">
+     {{template "nav" .}}
+
+        
+    <div class="container">
+    <!-- Content here -->
+            <h1  id="name">{{ .Nickname }}在跟读</h1>
+
             {{ if .NotFollow }}
-                <div class="weui-media-box weui-media-box_text">
-                    <p class="weui-media-box__desc">未找{{ .Nickname }}の跟读</p>
-                </div>
+            <p>未找{{ .Nickname }}の跟读</p>
             {{ else }}
-                {{ range .Books }}
-                <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title"><a href="{{.URL}}" class="weui-form-preview__btn_default">{{ .Name }}</a></h4>
-                    <p class="weui-media-box__desc">{{ .Chapter }}</p>
-                    <ul class="weui-media-box__info">
+
+                <div class="card-columns">
+        
+
+                    {{ range .Books }}
+                    
+                    <div class="card">
+                        <div class="card-body">
+                        <h4 class="card-title"><a href="{{.URL}}">{{ .Name }}</a> <span class="badge badge-light">{{ .Author }}</span></h4>
+                        <p class="card-text">{{ .Chapter }} <small class="text-muted">{{ .UpdatedAt.Format "01-02 15:04" }}</small></p>
+
+
                         {{ if .UnFollowBtm }}
-                        <li class="weui-media-box__info__meta "><a href="{{.UnFollowLink}}" rel="nofollow" class="weui-form-preview__btn_default">弃追</a></li>
+                        <a href="{{.UnFollowLink}}" rel="nofollow" class="card-link">弃追</a>
                         {{ end }}
-                        <li class="weui-media-box__info__meta"><a href="{{ .BookURL }}" rel="nofollow" class="weui-form-preview__btn_default">{{ .Posted }}</a></li>
-                        <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">{{ .UpdatedAt.Format "01-02 15:04" }}</li>
-                    </ul>
+                        </div>
+
+                        
+                        <div class="card-body">
+                         <a href="{{.ChapterURL}}" class="btn btn-primary" rel="nofollow">Go Read</a> 
+                        {{ if .IsVIP }}
+                        <a href="https://www.baidu.com/s?wd={{ .Name }}" class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true" rel="nofollow">百度一下</a>
+                        {{ end }}
+                        </div>
+
+                    </div>
+                    
+                            
+
+                    {{ end }}
+
+                        
                 </div>
                 {{ end }}
-            {{ end }}
             </div>
-        </div>
-
-
-        
-        
 		
 		
 		 {{template "footer" .}}

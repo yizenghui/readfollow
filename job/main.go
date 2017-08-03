@@ -52,8 +52,8 @@ func main() {
 	db.AutoMigrate(&Book{})
 	defer db.Close()
 
-	client := rpc.NewClient("http://47.92.130.14:80/rpc")
-	// client := rpc.NewClient("http://127.0.0.1:8080/rpc")
+	// client := rpc.NewClient("http://47.92.130.14:80/rpc")
+	client := rpc.NewClient("http://127.0.0.1:8080/rpc")
 	client.UseService(&stub)
 	defer client.Close()
 
@@ -129,7 +129,7 @@ func syncBook(info data.Book) {
 
 //PostTask 同步任务
 func PostTask() {
-	ticker := time.NewTicker(time.Millisecond * 500)
+	ticker := time.NewTicker(time.Millisecond * 1000)
 	for _ = range ticker.C {
 		go Publish()
 	}

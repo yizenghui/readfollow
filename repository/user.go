@@ -50,6 +50,7 @@ func GetUser(id int, openID string) (User, error) {
 			}
 			dbo.Posted = common.TransformBookPosted(b.BookURL)
 			dbo.BookURL = common.TransformBookURL(b.BookURL)
+			dbo.ChapterURL = b.ChapterURL
 			data.Books = append(data.Books, dbo)
 		}
 	} else {

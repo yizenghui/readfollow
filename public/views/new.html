@@ -59,13 +59,23 @@
             
             <div class="card">
                 <div class="card-body">
-                <h4 class="card-title"><a href="{{.URL}}">{{ .Name }}</a></h4>
-                <p class="card-text">{{ .Chapter }}</p>
-                <p class="card-text"><small class="text-muted">{{ .UpdatedAt.Format "01-02 15:04" }}</small></p>
+                <h4 class="card-title"><a href="{{.URL}}">{{ .Name }}</a> <span class="badge badge-light">{{ .Author }}</span></h4>
+                <p class="card-text">{{ .Chapter }} <small class="text-muted">{{ .UpdatedAt.Format "01-02 15:04" }}</small></p>
+
+
                 {{ if .UnFollowBtm }}
                 <a href="{{.UnFollowLink}}" rel="nofollow" class="card-link">弃追</a>
                 {{ end }}
                 </div>
+
+                
+                <div class="card-body">
+                  <a href="{{.ChapterURL}}" class="btn btn-primary" rel="nofollow">Go Read</a>
+                  {{ if .IsVIP }}
+                  <a href="https://www.baidu.com/s?wd={{ .Name }}" class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true" rel="nofollow">百度一下</a>
+                  {{ end }}
+                </div>
+
             </div>
             
                     

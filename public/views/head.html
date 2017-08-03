@@ -1,11 +1,27 @@
 {{define "head"}}
 <head>
+    <!-- Required meta tags -->
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
 	<title>{{ .Title }}</title>
 	<meta name="keywords" content="{{ .Keywords }}"/>
 	<meta name="description" content="{{ .Description }}"/>
-	<!-- 引入 WeUI -->
-	<link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
+
+    <link rel="stylesheet" href="/static/css/docs.min.css">
+
+    <link rel="stylesheet" href="/static/css/docsearch.min.css" >
+
+    <link href="/static/css/navbar-top-fixed.css" rel="stylesheet">
+
+    <style>
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+</style>
 </head>
 {{end}}

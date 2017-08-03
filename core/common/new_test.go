@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/yizenghui/readfollow/conf"
+	"github.com/yizenghui/readfollow/model"
 )
 
 func init() {
@@ -19,9 +20,14 @@ func init() {
 }
 
 func Test_NewBookSort(t *testing.T) {
+	var book model.Book
+
+	book.GetBookByID(12)
+	AddNewBook(book)
 	newBooks := GetNewBooks()
 	newBooks2 := GetNewBooks()
 	fmt.Println(len(newBooks))
+
 	fmt.Println(len(newBooks2))
 }
 
@@ -78,6 +84,22 @@ func Test_NewPersonSort(t *testing.T) {
 	fmt.Println(people[0:3])
 }
 
+func Test_AppanNewBook(t *testing.T) {
+
+	var book model.Book
+	var book2 model.Book
+
+	book.GetBookByID(3453)
+	AppanNewBook(book)
+	book2.GetBookByID(7917)
+	AppanNewBook(book2)
+
+	newBooks := GetNewBooks()
+	newBooks2 := GetNewBooks()
+	fmt.Println(len(newBooks))
+
+	fmt.Println(len(newBooks2))
+}
 func Test_MakeSlice(t *testing.T) {
 
 	var ss []string

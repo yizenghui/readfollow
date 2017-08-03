@@ -65,6 +65,13 @@ func New(c echo.Context) error {
 	return c.Render(http.StatusOK, "new", data)
 }
 
+//Hot 新更新的
+func Hot(c echo.Context) error {
+	openID := c.QueryParam("open_id")
+	data := repository.GetHotBook(openID)
+	return c.Render(http.StatusOK, "hot", data)
+}
+
 //User 关注
 func User(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -92,6 +99,7 @@ func Find(c echo.Context) error {
 		// 通过书名搜索
 		if query != "" {
 			books, err := repository.SearchBook(query)
+
 			if err == nil {
 				// 取第一本
 				book := books[0]
@@ -196,13 +204,16 @@ func main() {
 	e.GET("/hello", Hello)
 	// e.GET("/hot", Hello)
 	e.GET("/new", New)
+	e.GET("/hot", Hot)
 	e.GET("/404.html", PageNotFound)
 
 	e.Any("/wx_callback", echoWxCallbackHandler)
 	// Route => handler
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "域名备案中")
-	})
+
+	e.GET("/", Hot)
+	// e.GET("/", func(c echo.Context) error {
+	// 	return c.String(http.StatusOK, "域名备案中")
+	// })
 
 	// Start server 通过匹配来控制开启的端口
 	e.Logger.Fatal(e.Start(conf.Conf.App.Port))

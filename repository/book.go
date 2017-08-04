@@ -47,6 +47,7 @@ type BookList struct {
 // AddNewBook 添加一本刚更新的书籍
 func AddNewBook(book model.Book) {
 	common.AddNewBook(book)
+	common.AddHotBook(book)
 }
 
 //GetNewBook 获取最新更新书籍

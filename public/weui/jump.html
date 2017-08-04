@@ -1,0 +1,53 @@
+{{define "jump"}}
+<!DOCTYPE html>
+<html lang="en">
+    {{template "head" .}}
+    <body>
+        
+        {{template "nav" .}}
+        <!-- 使用 -->
+		<div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <em class="weui-form-preview__value" style="font-size:1.2em">{{.Chapter}}{{ if .IsVIP }} vip {{ end }}</em>
+                
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">书名</label>
+                    <span class="weui-form-preview__value">{{.Name}}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">作者</label>
+                    <span class="weui-form-preview__value">{{.Author}}</span>
+                </div>
+
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">首发</label>
+                    <span class="weui-form-preview__value"> {{.Posted}} </span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">作品字数</label>
+                    <span class="weui-form-preview__value">{{.Total}}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">缓存时间</label>
+                    <span class="weui-form-preview__value"> {{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</span>
+                </div>
+            </div>
+            <div class="weui-form-preview__ft">
+                {{ if .UnFollowBtm }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.UnFollowLink}}" rel="nofollow">弃追</a>
+                {{ end }}
+                {{ if .FollowBtm }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.FollowLink}}" rel="nofollow">追书</a>
+                {{ end }}
+                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="{{.JumpURL}}" rel="nofollow">前往查看</a>
+            </div>
+        </div>
+		
+		
+		
+		 {{template "footer" .}}
+    </body>
+</html>
+{{end}}

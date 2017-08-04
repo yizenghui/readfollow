@@ -1,0 +1,38 @@
+{{define "nav"}}
+
+    <div class="page__bd">
+
+        <div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form" action="/find">
+                <input type="hidden" name="open_id" value="{{.OpenID}}"/>
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" name="q" class="weui-search-bar__input" id="searchInput" placeholder="书名、作者名" autocomplete="off"/>
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText">
+                    <i class="weui-icon-search"></i>
+                    <span>龙符</span>
+                </label>
+            </form>
+            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+        </div>
+                <div class="weui-tab">
+            <div class="weui-navbar">
+                <div class="weui-navbar__item">
+                    选项一
+                </div>
+                <div class="weui-navbar__item">
+                    选项二
+                </div>
+                <div class="weui-navbar__item">
+                    选项三
+                </div>
+            </div>
+            <div class="weui-tab__panel">
+
+            </div>
+        </div>
+    </div>
+
+{{end}}

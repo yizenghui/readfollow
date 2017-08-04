@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/gorilla/feeds"
 	"github.com/hprose/hprose-golang/rpc"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo"
@@ -136,6 +139,57 @@ func echoWxCallbackHandler(c echo.Context) error {
 	return err
 }
 
+//Rss sign
+func Rss(c echo.Context) error {
+
+	now := time.Now()
+	feed := &feeds.Feed{
+		Title:       "jmoiron.net blog",
+		Link:        &feeds.Link{Href: "http://jmoiron.net/blog"},
+		Description: "discussion about tech, footie, photos",
+		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+		Created:     now,
+	}
+
+	feed.Items = []*feeds.Item{
+		&feeds.Item{
+			Title:       "Limiting Concurrency in Go",
+			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/limiting-concurrency-in-go/"},
+			Description: "A discussion on controlled parallelism in golang",
+			Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+			Created:     now,
+		},
+		&feeds.Item{
+			Title:       "Logic-less Template Redux",
+			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/logicless-template-redux/"},
+			Description: "More thoughts on logicless templates",
+			Created:     now,
+		},
+		&feeds.Item{
+			Title:       "Idiomatic Code Reuse in Go",
+			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/idiomatic-code-reuse-in-go/"},
+			Description: "How to use interfaces <em>effectively</em>",
+			Created:     now,
+		},
+	}
+
+	// return c.XML(http.StatusOK, feed)
+
+	rss, err := feed.ToRss()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationXMLCharsetUTF8)
+
+	fmt.Fprintf(c.Response().Writer, rss)
+
+	// var err error
+	return err
+	// c.Response().WriteHeader(http.StatusOK)
+	// return xml.NewEncoder(c.Response()).Encode(rss)
+}
+
 //Sign sign
 func Sign(c echo.Context) error {
 	callback := c.QueryParam("callback")
@@ -177,7 +231,7 @@ func main() {
 	// go repository.RPCServeStart(":819")
 
 	t := &Template{
-		templates: template.Must(template.ParseGlob("views/*.html")),
+		templates: template.Must(template.ParseGlob("weui/*.html")),
 	}
 
 	e := echo.New()
@@ -206,6 +260,7 @@ func main() {
 	e.GET("/new", New)
 	e.GET("/hot", Hot)
 	e.GET("/404.html", PageNotFound)
+	e.GET("/rss.xml", Rss)
 
 	e.Any("/wx_callback", echoWxCallbackHandler)
 	// Route => handler

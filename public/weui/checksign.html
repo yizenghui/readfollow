@@ -1,0 +1,27 @@
+{{define "checksign"}}
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <title>Wechat Fans Sign Check</title>
+        <!-- 引入 WeUI -->
+        <link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
+    </head>
+    <body>
+        <!-- 使用 -->
+
+        <div class="weui-panel weui-panel_access">
+            
+            <div class="weui-panel__hd">
+				<h1 class="page__title"></h1>
+				<p class="page__desc">
+					{{ . }}
+				</p>
+            </div>
+            
+        </div>
+		 {{template "footer" .}}
+    </body>
+</html>
+{{end}}

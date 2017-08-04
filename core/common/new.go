@@ -46,8 +46,10 @@ func AddNewBook(book model.Book) {
 func AddHotBook(book model.Book) {
 	if book.Rank > 0 {
 		AppanHotBook(book)
-		sort.Sort(ByUpdate(newBooks))
-		newBooks = newBooks[0:100]
+		sort.Sort(ByRank(hotBooks))
+		if len(hotBooks) > 100 {
+			hotBooks = hotBooks[0:100]
+		}
 	}
 }
 
@@ -57,7 +59,9 @@ func GetHotBooks() []model.Book {
 		var book model.Book
 		hotBooks = book.GetHotBooks()
 	}
-	hotBooks = hotBooks[0:100]
+	if len(hotBooks) > 100 {
+		hotBooks = hotBooks[0:100]
+	}
 	return hotBooks
 }
 

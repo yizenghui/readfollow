@@ -43,7 +43,7 @@ func (book *Book) GetNewBooks() []Book {
 // GetHotBooks 获取最热100本书
 func (book *Book) GetHotBooks() []Book {
 	var books []Book
-	DB().Limit(100).Order("rank Desc").Find(&books)
+	DB().Where("rank > ?", 0).Limit(100).Order("rank Desc").Find(&books)
 	return books
 }
 

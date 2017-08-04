@@ -24,3 +24,9 @@ func Test_GetBook(t *testing.T) {
 	users := book.GetFollowUser()
 	fmt.Println(users)
 }
+
+func Test_GetHotBooks(t *testing.T) {
+	var book Book
+	books := book.GetHotBooks()
+	fmt.Println(books)
+}

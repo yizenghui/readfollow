@@ -52,8 +52,8 @@ func main() {
 	db.AutoMigrate(&Book{})
 	defer db.Close()
 
-	// client := rpc.NewClient("http://47.92.130.14:80/rpc")
-	client := rpc.NewClient("http://127.0.0.1:8080/rpc")
+	client := rpc.NewClient("http://47.92.130.14:80/rpc")
+	// client := rpc.NewClient("http://127.0.0.1:8080/rpc")
 	client.UseService(&stub)
 	defer client.Close()
 

@@ -12,20 +12,20 @@
              <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__bd">
                     <span style="vertical-align: middle">
-                        主页
-                    </span>
-                </div>
-                <div class="weui-cell__ft"><a href="{{.JumpURL}}">{{.Name}}</a></div>
-            </div>
-
-             <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd">
-                    <span style="vertical-align: middle">
                         最新章节
                     </span>
                     {{ if .IsVIP }}<span class="weui-badge" style="margin-left: 5px;">VIP</span>{{ end }}
                 </div>
                 <div class="weui-cell__ft"><a href="{{.ChapterURL}}">{{.Chapter}}</a></div>
+            </div>
+
+             <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">
+                        主页
+                    </span>
+                </div>
+                <div class="weui-cell__ft"><a href="{{.JumpURL}}">{{.Name}}</a></div>
             </div>
 
 

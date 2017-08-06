@@ -3,8 +3,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<title>{{ .Title }}</title>
-	<meta name="keywords" content="{{ .Keywords }}"/>
-	<meta name="description" content="{{ .Description }}"/>
+
+	 {{ if ne .Keywords  "" }}
+		<meta name="keywords" content="{{ .Keywords }}"/>
+	{{ end }}
+	{{ if ne .Description  "" }}
+		<meta name="description" content="{{ .Description }}"/>
+	{{ end }}
 	<!-- 引入 WeUI -->
 	<link rel="stylesheet" href="//res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"/>
 </head>

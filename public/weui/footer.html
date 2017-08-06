@@ -53,11 +53,17 @@
 	<br>
 	<div class="weui-footer">
 		<p class="weui-footer__links">
-            <a href="javascript:void(0);" class="weui-footer__link">首页</a>
-            <a href="javascript:void(0);" class="weui-footer__link">关于我们</a>
-			<a href="javascript:void(0);" class="weui-footer__link">免责声名</a>
-			<a href="javascript:void(0);" class="weui-footer__link">侵权联系</a>
-			<a href="javascript:void(0);" class="weui-footer__link">RSS</a>
+
+            {{ if eq .OpenID  "" }}
+            <a href="/" class="weui-footer__link">首页</a>
+            <a href="/sign?callback=/" rel="nofollow" class="weui-footer__link">粉丝登录</a>
+            <a href="javascript:void(0);" class="weui-footer__link">关于</a>
+			<a href="/rss.xml" class="weui-footer__link">RSS</a>
+            {{ else }}
+            <a href="/?open_id={{ .OpenID }}" class="weui-footer__link">首页</a>
+            <a href="/" class="weui-footer__link">粉丝登出</a>
+            {{ end }}
+
         </p>
         <br>
 		<p class="weui-footer__text">

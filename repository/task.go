@@ -15,6 +15,7 @@ type SignTask struct {
 	Ticket    string
 	QrcodeURL string
 	Callback  string
+	SeoTag
 }
 
 // CreateWebGetSignTask 站点获取签名任务
@@ -29,6 +30,7 @@ func CreateWebGetSignTask(callback string) (st SignTask, err error) {
 	st.QrcodeURL = fmt.Sprintf("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%v", st.Ticket)
 	st.Callback = callback
 	common.SetTicket(st.ID, st.Ticket)
+	st.Title = "微信公众号粉丝登录"
 	return st, nil
 	// return st
 }

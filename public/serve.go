@@ -16,7 +16,6 @@ import (
 	"github.com/yizenghui/readfollow/conf"
 	"github.com/yizenghui/readfollow/model"
 	"github.com/yizenghui/readfollow/repository"
-	"github.com/yizenghui/sda/code"
 )
 
 //Template 模板
@@ -90,29 +89,8 @@ func User(c echo.Context) error {
 func Find(c echo.Context) error {
 	openID := c.QueryParam("open_id")
 	query := c.QueryParam("q")
-
-	url := code.ExplainBookDetailedAddress(query)
-	if url != "" {
-		book, err := repository.FindBook(url)
-		if err == nil {
-			return c.Redirect(http.StatusFound, fmt.Sprintf("/s/%d?open_id=%v", book.ID, openID))
-		}
-		return c.Render(http.StatusOK, "hello", "找不到您所想要的资源")
-	} else {
-		// 通过书名搜索
-		if query != "" {
-			books, err := repository.SearchBook(query)
-
-			if err == nil {
-				// 取第一本
-				book := books[0]
-				return c.Redirect(http.StatusFound, fmt.Sprintf("/s/%d?open_id=%v", book.ID, openID))
-			}
-		}
-	}
-	data := repository.FindGuideData(openID)
+	data := repository.GetFind(query, openID)
 	return c.Render(http.StatusOK, "find", data)
-
 }
 
 //Home 查找Book资源

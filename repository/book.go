@@ -8,6 +8,7 @@ import (
 	"github.com/yizenghui/readfollow/core/common"
 	"github.com/yizenghui/readfollow/model"
 	"github.com/yizenghui/sda"
+	"github.com/yizenghui/sda/code"
 )
 
 // SeoTag seo 标签
@@ -189,11 +190,61 @@ func GetBookInfo(id int, openID string) (BookInfo, error) {
 	}
 
 	data.Title = fmt.Sprintf("跟读%v最新章节%v", data.Name, data.Chapter)
-	data.Description = fmt.Sprintf("%v是%v发布于%v的小说,目前最新章节%v", data.Name, data.Author, data.Posted, data.Chapter)
+	data.Description = fmt.Sprintf("%v是%v发布于%v的小说,%v最新章节%v", data.Name, data.Author, data.Posted, data.Name, data.Chapter)
 	data.Keywords = fmt.Sprintf("%v,%v", data.Name, data.Author)
 	// data.OpenID = openID
 
 	return data, nil
+}
+
+//GetFind 获取搜索数据
+func GetFind(query, openID string) BookList {
+
+	data := BookList{}
+
+	var books []model.Book
+
+	url := code.ExplainBookDetailedAddress(query)
+	if url != "" {
+		book, err := FindBook(url)
+		if err == nil {
+			books = []model.Book{book}
+		}
+	} else {
+		// 通过书名搜索
+		if query != "" {
+			books, _ = SearchBook(query)
+		}
+	}
+
+	// var book model.Book
+	// books := book.GetNewBooks()
+	// 把新书放在内存里面而不是随时去查找数据库
+	if len(books) > 0 {
+		for _, b := range books {
+			dbo := Book{ID: b.ID, Name: b.Name, Chapter: b.Chapter, UpdatedAt: b.UpdatedAt, Author: b.Author, AuthorURL: b.AuthorURL}
+			if openID != "" {
+				dbo.URL = fmt.Sprintf("/s/%d?open_id=%v", b.ID, openID)
+			} else {
+				dbo.URL = fmt.Sprintf("/s/%d", b.ID)
+			}
+			dbo.ChapterURL = b.ChapterURL
+			dbo.Posted = common.TransformBookPosted(b.BookURL)
+			dbo.BookURL = common.TransformBookURL(b.BookURL)
+			dbo.IsVIP = b.IsVIP
+			data.Books = append(data.Books, dbo)
+
+		}
+	} else {
+		data.NotUpdate = true
+	}
+
+	data.Title = fmt.Sprintf("跟读%v", query)
+	data.Description = fmt.Sprintf("跟读%v,%v小说搜索列表", query, query)
+	data.Keywords = fmt.Sprintf("%v,%v,%v", "跟读", "小说搜索", query)
+	data.OpenID = openID
+
+	return data
 }
 
 // FindBook 通过url获取书籍信息

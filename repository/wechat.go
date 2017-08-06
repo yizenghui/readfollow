@@ -116,6 +116,7 @@ func defaultEventHandler(ctx *core.Context) {
 
 	event := menu.GetScanCodePushEvent(ctx.MixedMsg)
 
+	// TODO 识别数值范围并解释要做什么事
 	SetWebGetSignTaskValueForWechatPush(event.EventKey, event.FromUserName)
 
 	rc := fmt.Sprintf(`todo %v`, event.EventKey)

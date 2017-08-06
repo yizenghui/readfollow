@@ -1,39 +1,72 @@
 {{define "jump"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
     {{template "head" .}}
     <body>
         
         {{template "nav" .}}
+
+
+        <div class="weui-cells">
+
+             <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">
+                        主页
+                    </span>
+                </div>
+                <div class="weui-cell__ft"><a href="{{.JumpURL}}">{{.Name}}</a></div>
+            </div>
+
+             <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">
+                        最新章节
+                    </span>
+                    {{ if .IsVIP }}<span class="weui-badge" style="margin-left: 5px;">VIP</span>{{ end }}
+                </div>
+                <div class="weui-cell__ft"><a href="{{.ChapterURL}}">{{.Chapter}}</a></div>
+            </div>
+
+
+             <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">
+                        作者
+                    </span>
+                </div>
+                <div class="weui-cell__ft"><a href="{{.AuthorURL}}">{{.Author}}</a></div>
+            </div>
+
+
+            
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">作品首发</span>
+                </div>
+                <div style="text-align: right; color: #999999;">{{.Posted}}</div>
+
+            </div>
+            
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">作品字数</span>
+                </div>
+                <div style="text-align: right; color: #999999;">{{.Total}}</div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle">缓存时间</span>
+                </div>
+                <div style="text-align: right; color: #999999;">{{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</div>
+            </div>
+
+        </div>
+
+
         <!-- 使用 -->
 		<div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <em class="weui-form-preview__value" style="font-size:1.2em">{{.Chapter}}{{ if .IsVIP }} vip {{ end }}</em>
-                
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">书名</label>
-                    <span class="weui-form-preview__value">{{.Name}}</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">作者</label>
-                    <span class="weui-form-preview__value">{{.Author}}</span>
-                </div>
-
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">首发</label>
-                    <span class="weui-form-preview__value"> {{.Posted}} </span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">作品字数</label>
-                    <span class="weui-form-preview__value">{{.Total}}</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">缓存时间</label>
-                    <span class="weui-form-preview__value"> {{ .UpdatedAt.Format "2006-01-02 15:04:05" }}</span>
-                </div>
-            </div>
+            
             <div class="weui-form-preview__ft">
                 {{ if .UnFollowBtm }}
                 <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.UnFollowLink}}" rel="nofollow">弃追</a>
@@ -41,7 +74,13 @@
                 {{ if .FollowBtm }}
                 <a class="weui-form-preview__btn weui-form-preview__btn_default" href="{{.FollowLink}}" rel="nofollow">追书</a>
                 {{ end }}
+                
+                {{ if .IsVIP }}
+                    <a href="https://www.baidu.com/s?wd={{ .Name }}" class="weui-form-preview__btn weui-form-preview__btn_default" role="button" aria-pressed="true" rel="nofollow">百度</a>
+                {{ end }}
+
                 <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="{{.JumpURL}}" rel="nofollow">前往查看</a>
+
             </div>
         </div>
 		

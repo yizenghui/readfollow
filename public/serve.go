@@ -14,6 +14,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo"
 	"github.com/yizenghui/readfollow/conf"
+	"github.com/yizenghui/readfollow/core/common"
 	"github.com/yizenghui/readfollow/model"
 	"github.com/yizenghui/readfollow/repository"
 )
@@ -122,34 +123,51 @@ func Rss(c echo.Context) error {
 
 	now := time.Now()
 	feed := &feeds.Feed{
-		Title:       "jmoiron.net blog",
-		Link:        &feeds.Link{Href: "http://jmoiron.net/blog"},
-		Description: "discussion about tech, footie, photos",
-		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+		Title:       "小说跟读",
+		Link:        &feeds.Link{Href: "http://readfollow.com"},
+		Description: "跟读最新更新小说",
+		Author:      &feeds.Author{Name: "XiaoYi", Email: "zenghuitrue@gmail.com"},
 		Created:     now,
 	}
 
-	feed.Items = []*feeds.Item{
-		&feeds.Item{
-			Title:       "Limiting Concurrency in Go",
-			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/limiting-concurrency-in-go/"},
-			Description: "A discussion on controlled parallelism in golang",
-			Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
-			Created:     now,
-		},
-		&feeds.Item{
-			Title:       "Logic-less Template Redux",
-			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/logicless-template-redux/"},
-			Description: "More thoughts on logicless templates",
-			Created:     now,
-		},
-		&feeds.Item{
-			Title:       "Idiomatic Code Reuse in Go",
-			Link:        &feeds.Link{Href: "http://jmoiron.net/blog/idiomatic-code-reuse-in-go/"},
-			Description: "How to use interfaces <em>effectively</em>",
-			Created:     now,
-		},
+	feed.Items = []*feeds.Item{}
+
+	books := common.GetNewBooks()
+	if len(books) > 0 {
+		feed.Created = books[0].UpdatedAt
+		for _, b := range books {
+			feed.Items = append(feed.Items, &feeds.Item{
+				Title:       b.Name,
+				Link:        &feeds.Link{Href: fmt.Sprintf("http://readfollow.com/s/%d", b.ID)},
+				Description: fmt.Sprintf("%v", b.Chapter),
+				Author:      &feeds.Author{Name: b.Author},
+				Created:     b.UpdatedAt,
+			})
+
+		}
 	}
+
+	// feed.Items = []*feeds.Item{
+	// 	&feeds.Item{
+	// 		Title:       "Limiting Concurrency in Go",
+	// 		Link:        &feeds.Link{Href: "http://jmoiron.net/blog/limiting-concurrency-in-go/"},
+	// 		Description: "A discussion on controlled parallelism in golang",
+	// 		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+	// 		Created:     now,
+	// 	},
+	// 	&feeds.Item{
+	// 		Title:       "Logic-less Template Redux",
+	// 		Link:        &feeds.Link{Href: "http://jmoiron.net/blog/logicless-template-redux/"},
+	// 		Description: "More thoughts on logicless templates",
+	// 		Created:     now,
+	// 	},
+	// 	&feeds.Item{
+	// 		Title:       "Idiomatic Code Reuse in Go",
+	// 		Link:        &feeds.Link{Href: "http://jmoiron.net/blog/idiomatic-code-reuse-in-go/"},
+	// 		Description: "How to use interfaces <em>effectively</em>",
+	// 		Created:     now,
+	// 	},
+	// }
 
 	// return c.XML(http.StatusOK, feed)
 

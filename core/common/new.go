@@ -31,7 +31,9 @@ func GetNewBooks() []model.Book {
 		var book model.Book
 		newBooks = book.GetNewBooks()
 	}
-	newBooks = newBooks[0:100]
+	if len(newBooks) > 100 {
+		newBooks = newBooks[0:100]
+	}
 	return newBooks
 }
 
@@ -39,7 +41,9 @@ func GetNewBooks() []model.Book {
 func AddNewBook(book model.Book) {
 	AppanNewBook(book)
 	sort.Sort(ByUpdate(newBooks))
-	newBooks = newBooks[0:100]
+	if len(newBooks) > 100 {
+		newBooks = newBooks[0:100]
+	}
 }
 
 // AddHotBook 添加一本刚更新的书籍

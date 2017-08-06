@@ -124,7 +124,7 @@ func Rss(c echo.Context) error {
 	now := time.Now()
 	feed := &feeds.Feed{
 		Title:       "小说跟读",
-		Link:        &feeds.Link{Href: "http://readfollow.com"},
+		Link:        &feeds.Link{Href: "http://book.readfollow.com"},
 		Description: "跟读最新更新小说",
 		Author:      &feeds.Author{Name: "XiaoYi", Email: "zenghuitrue@gmail.com"},
 		Created:     now,
@@ -138,7 +138,7 @@ func Rss(c echo.Context) error {
 		for _, b := range books {
 			feed.Items = append(feed.Items, &feeds.Item{
 				Title:       b.Name,
-				Link:        &feeds.Link{Href: fmt.Sprintf("http://readfollow.com/s/%d", b.ID)},
+				Link:        &feeds.Link{Href: fmt.Sprintf("http://book.readfollow.com/s/%d", b.ID)},
 				Description: fmt.Sprintf("%v", b.Chapter),
 				Author:      &feeds.Author{Name: b.Author},
 				Created:     b.UpdatedAt,

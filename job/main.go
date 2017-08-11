@@ -32,6 +32,26 @@ type Book struct {
 	AuthorURL  string
 	IsVIP      bool
 	PublishAt  int64 `sql:"index" default:"0"`
+	BookFans   []*BookFans
+	Red        int64
+}
+
+//Fans 粉丝
+type Fans struct {
+	gorm.Model
+	Name     string
+	URL      string
+	BookFans []*BookFans
+}
+
+// BookFans 小说粉丝
+type BookFans struct {
+	ID     int
+	Book   *Book
+	BookID int
+	Fans   *Fans
+	FansID int
+	Level  int16
 }
 
 var db *gorm.DB
@@ -49,7 +69,7 @@ func main() {
 	}
 
 	// 自动迁移模式
-	db.AutoMigrate(&Book{})
+	db.AutoMigrate(&Book{}, &Fans{}, &BookFans{})
 	defer db.Close()
 
 	client := rpc.NewClient("http://47.92.130.14:80/rpc")
@@ -57,7 +77,7 @@ func main() {
 	client.UseService(&stub)
 	defer client.Close()
 
-	go PostTask()
+	// go PostTask()
 	// 启动就执行一次
 	SpiderBookJobTask()
 	syncUpdateList()
@@ -111,19 +131,60 @@ func syncBook(info data.Book) {
 	db.Where(Book{BookURL: info.BookURL}).FirstOrCreate(&book)
 
 	// 章节地址与数据库中的不同
-	if book.ChapterURL != info.ChapterURL {
-		book.Name = info.Name
-		book.Chapter = info.Chapter
-		book.ChapterURL = info.ChapterURL
-		book.Author = info.Author
-		book.AuthorURL = info.AuthorURL
-		book.BookURL = info.BookURL
-		book.IsVIP = info.IsVIP
-		book.Total = info.Total
-		book.PublishAt = 0
-		db.Save(&book)
-		fmt.Printf("sp: %v  %v  %v\n", book.ID, book.Name, book.Chapter)
+	// if book.ChapterURL != info.ChapterURL {
+	book.Name = info.Name
+	book.Chapter = info.Chapter
+	book.ChapterURL = info.ChapterURL
+	book.Author = info.Author
+	book.AuthorURL = info.AuthorURL
+	book.BookURL = info.BookURL
+	book.IsVIP = info.IsVIP
+	book.Total = info.Total
+	book.PublishAt = 0
+
+	fans, _ := sda.FindBookFansByBookURL(info.BookURL)
+
+	// for _, f := range fans {
+	// 	if f.Name != "" && f.URL != "" {
+	// 		book.BookFans = append(book.BookFans, &BookFans{
+	// 			Fans: &Fans{
+	// 				Name: f.Name,
+	// 				URL:  f.URL,
+	// 			},
+	// 			Level: f.Level,
+	// 		})
+	// 	}
+	// }
+
+	if len(fans) > 100 {
+		fans = fans[0:100]
 	}
+
+	red := 0
+	for _, f := range fans {
+		red = red + int(f.Level)
+	}
+	book.Red = int64(red)
+
+	if len(fans) > 5 {
+		fans = fans[0:5]
+	}
+
+	for _, f := range fans {
+		if f.Name != "" && f.URL != "" {
+			var fs Fans
+			db.Where(Fans{URL: f.URL}).FirstOrCreate(&fs)
+			fs.Name = f.Name
+			// db.Save(&fs)
+			book.BookFans = append(book.BookFans, &BookFans{
+				Fans:  &fs,
+				Level: f.Level,
+			})
+		}
+	}
+	db.Save(&book)
+	fmt.Printf("sp: %v  %v  %v\n", book.ID, book.Name, book.Chapter)
+	// }
 
 }
 

@@ -17,6 +17,7 @@
                     <p class="weui-media-box__desc">还没有任何热门书籍呢</p>
                 </div>
             {{ else }}
+             {{template "li" .}}
                 {{ range .Books }}
                 <div class="weui-media-box weui-media-box_text">
                     <h4 class="weui-media-box__title"><a href="{{.URL}}" class="weui-form-preview__btn_default">{{ .Name }}</a></h4>

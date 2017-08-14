@@ -11,7 +11,9 @@ type User struct {
 	OpenID    string     `gorm:"size:255"`
 	Nickname  string     `gorm:"size:255"`
 	Head      string     `gorm:"size:255"`
-	Books     []Book     `gorm:"many2many:user_books;"` // 用户关注的书
+	Books     []Book     `gorm:"many2many:user_books;"`    // 用户关注的书
+	Likes     []Book     `gorm:"many2many:user_likes;"`    // 用户喜欢
+	DisLikes  []Book     `gorm:"many2many:user_dislikes;"` // 用户不喜欢
 }
 
 // GetUserByID 获取用户关注的书籍
@@ -50,6 +52,18 @@ func (user *User) UserRemoveFollowBooks(books []Book) {
 func (user *User) UserFollowBook(book Book) {
 	// 添加一个关联关系
 	DB().Model(&user).Association("books").Append(book)
+}
+
+// UserLikeBook 用户关注一本书
+func (user *User) UserLikeBook(book Book) {
+	// 添加一个关联关系
+	DB().Model(&user).Association("likes").Append(book)
+}
+
+// UserRemoveLikeBook 用户取消一本书
+func (user *User) UserRemoveLikeBook(book Book) {
+	// 移除所有关联关系
+	DB().Model(&user).Association("likes").Delete(book)
 }
 
 // CheckUserIsFollowBook  检查用户是否关注某书

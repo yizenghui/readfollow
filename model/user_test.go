@@ -14,6 +14,7 @@ import (
 
 func init() {
 	conf.InitConfig("../conf/conf.toml")
+	DB().AutoMigrate(&Book{}, &User{})
 }
 
 func Test_GetUser(t *testing.T) {
@@ -87,6 +88,21 @@ func Test_UserFollowBook(t *testing.T) {
 	var book Book
 	DB().First(&book, 1)
 	user.UserFollowBook(book)
+}
+func Test_UserLikeBook(t *testing.T) {
+	var user User
+	DB().First(&user, 1)
+	var book Book
+	DB().First(&book, 1)
+	user.UserLikeBook(book)
+}
+
+func Test_UserRemoveLikeBook(t *testing.T) {
+	var user User
+	DB().First(&user, 1)
+	var book Book
+	DB().First(&book, 1)
+	user.UserRemoveLikeBook(book)
 }
 
 func Test_UserFollowBooks(t *testing.T) {

@@ -2,17 +2,16 @@ package repository
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"strconv"
 
-	"github.com/yizenghui/readfollow/conf"
-	"github.com/yizenghui/readfollow/core/common"
+	"github.com/GanEasy/WechatMessageServe/orm"
+	"github.com/yizenghui/sda/code"
 
 	"github.com/chanxuehong/wechat.v2/mp/core"
 	"github.com/chanxuehong/wechat.v2/mp/menu"
 	"github.com/chanxuehong/wechat.v2/mp/message/callback/request"
 	"github.com/chanxuehong/wechat.v2/mp/message/callback/response"
-	"github.com/yizenghui/readfollow/model"
 )
 
 var (
@@ -23,9 +22,17 @@ var (
 //	fansCache  *cache.Cache
 )
 
+const (
+	wxAppId         = "wx702b93aef72f3549"
+	wxAppSecret     = "8b69f45fc737a938cbaaffc05b192394"
+	wxOriId         = "gh_cb5c31e2c2dd"
+	wxToken         = "admin"
+	wxEncodedAESKey = ""
+)
+
 func init() {
 
-	conf.InitConfig("../conf/conf.toml")
+	// conf.InitConfig("../conf/conf.toml")
 	//	fansCache = cache.New(5*time.Minute, 30*time.Second)
 	mux := core.NewServeMux()
 	mux.DefaultMsgHandleFunc(defaultMsgHandler)
@@ -37,7 +44,8 @@ func init() {
 
 	// fmt.Println("xx", conf.Conf.Wechat.OriID, conf.Conf.Wechat.AppID, conf.Conf.Wechat.Token, conf.Conf.Wechat.AesKey)
 
-	msgServer = core.NewServer(conf.Conf.Wechat.OriID, conf.Conf.Wechat.AppID, conf.Conf.Wechat.Token, conf.Conf.Wechat.AesKey, msgHandler, nil)
+	msgServer = core.NewServer(wxOriId, wxAppId, wxToken, wxEncodedAESKey, msgHandler, nil)
+	// msgServer = core.NewServer(conf.Conf.Wechat.OriID, conf.Conf.Wechat.AppID, conf.Conf.Wechat.Token, conf.Conf.Wechat.AesKey, msgHandler, nil)
 }
 
 func textMsgHandler(ctx *core.Context) {
@@ -64,40 +72,11 @@ func menuClickEventHandler(ctx *core.Context) {
 
 	event := menu.GetClickEvent(ctx.MixedMsg)
 
-	log.Println(event.EventKey)
-
-	fans, _ := common.GetFans(event.FromUserName)
-	// event.FromUserName
-
-	openID := fans.OpenId
-
-	var user model.User
-	user.GetUserByOpenID(openID)
-
-	if user.Nickname != fans.Nickname {
-		user.Nickname = fans.Nickname
-		user.Head = fans.HeadImageURL
-		user.Save()
-	}
-
 	switch key := event.EventKey; key {
 
-	case "myfollow":
+	case "state":
 
-		rc := fmt.Sprintf(`<a href="http://%v/u/%d?open_id=%v">%v的关注</a>`, conf.Conf.App.Host, user.ID, user.OpenID, user.Nickname)
-		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
-		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
-		ctx.RawResponse(resp)
-
-	case "new":
-
-		rc := fmt.Sprintf(`<a href="http://%v/new?open_id=%v">最近更新</a>`, conf.Conf.App.Host, user.OpenID)
-		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
-		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
-		ctx.RawResponse(resp)
-
-	case "find":
-		rc := fmt.Sprintf(`<a href="http://%v/find?open_id=%v">搜索书籍</a>`, conf.Conf.App.Host, user.OpenID)
+		rc := fmt.Sprintf(`在线/离线功能开发中...`)
 		resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 		// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 		ctx.RawResponse(resp)
@@ -112,6 +91,34 @@ func menuClickEventHandler(ctx *core.Context) {
 	//	ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 }
 
+// SetWebGetSignTaskValueForWechatPush ..
+func SetWebGetSignTaskValueForWechatPush(str, openID string) bool {
+	i64, err := strconv.ParseInt(str, 10, 32)
+	fmt.Println(i64)
+	if err != nil {
+		// 这里面用正则匹配出整数
+		istr := code.FindString(`(?P<int>\d+)`, str, "int")
+		i64, _ = strconv.ParseInt(istr, 10, 64)
+		user := orm.User{}
+		user.GetUserByID(int(i64))
+		if user.Registered {
+			user.OpenID = openID
+			user.Save()
+			return true
+		}
+	} else {
+		user := orm.User{}
+		user.GetUserByID(int(i64))
+		fmt.Println(user)
+		if user.Registered {
+			user.OpenID = openID
+			user.Save()
+			return true
+		}
+	}
+	return false
+}
+
 func defaultEventHandler(ctx *core.Context) {
 
 	event := menu.GetScanCodePushEvent(ctx.MixedMsg)
@@ -119,13 +126,11 @@ func defaultEventHandler(ctx *core.Context) {
 	// TODO 识别数值范围并解释要做什么事
 	SetWebGetSignTaskValueForWechatPush(event.EventKey, event.FromUserName)
 
-	rc := fmt.Sprintf(`todo %v`, event.EventKey)
+	rc := fmt.Sprintf(`感谢您的使用!`)
 	resp := response.NewText(event.FromUserName, event.ToUserName, event.CreateTime, rc)
 	// ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 	ctx.RawResponse(resp)
-
-	log.Printf("收到事件:\n%s\n", ctx.MsgPlaintext)
-	ctx.NoneResponse()
+	// ctx.NoneResponse()
 }
 
 // WechatServe 微信接口服务

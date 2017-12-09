@@ -55,14 +55,7 @@
 
 </template>
 <style>
-  .menu {
-    min-width: 100px;
-    width: 70%;
-    max-width: 320px;
-  }
-  .content {
-    width: 100%;
-  }
+
 .refresh{
     width:30px;
     height: 30px;

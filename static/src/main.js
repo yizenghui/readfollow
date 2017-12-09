@@ -18,6 +18,8 @@ import VueAxios from 'vue-axios'
 
 // import VueLazyload from 'vue-lazyload'
 
+// import quickMenu from 'vue-quick-menu'
+// Vue.component(quickMenu.name,quickMenu)
 
 import VueTimeago from 'vue-timeago'
 

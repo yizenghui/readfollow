@@ -49,7 +49,7 @@ export default new Router({
         {
             path:'/t/:id', 
             name: 'cate',
-            component:CatePage
+            component:hotPage
         },      
         // {
         //     path:'/swiper',

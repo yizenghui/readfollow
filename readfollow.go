@@ -331,8 +331,8 @@ func main() {
 
 	e.File("logo.png", "images/80x80logo.png")
 	e.File("favicon.ico", "images/favicon.ico")
-	 e.Logger.Fatal(e.Start(":8005"))
+	// e.Logger.Fatal(e.Start(":8005"))
 
-	//e.Logger.Fatal(e.StartAutoTLS(":443"))
+	e.Logger.Fatal(e.StartAutoTLS(":443"))
 
 }

@@ -189,8 +189,8 @@ export default {
               $state.complete();
             } else {
               /** load data start */
+				site.loading = true
               setTimeout(function(){
-                site.loading = true
                 var uri = '/hot?limit=10&rank='+site.rank+'&tag='+site.cate;
                 api.get(uri,function(err,data){
                   if(data && data.length>0){

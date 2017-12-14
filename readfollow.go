@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/microcosm-cc/bluemonday"
@@ -298,6 +299,8 @@ func GetContent(c echo.Context) error {
 
 	// 给图片加上 最大宽度
 	info.Content = strings.Replace(info.Content, `<img src=`, `<img style="max-width:100%" src=`, -1)
+	info.Content = strings.Replace(info.Content, `<section>`, `<div>"`, -1)
+	info.Content = strings.Replace(info.Content, `</section>`, `</div>"`, -1)
 
 	type Info struct {
 		Title   string        `json:"title"`
@@ -314,6 +317,63 @@ func GetContent(c echo.Context) error {
 
 //GetList 获取列表 临时放在这里面，做小程序测试api
 func GetList(c echo.Context) error {
+	urlStr := c.QueryParam("url")
+	if urlStr == "" {
+		return c.JSON(http.StatusOK, "0")
+	}
+	links, _ := reader.GetList(urlStr)
+	return c.JSON(http.StatusOK, links)
+}
+
+//GetContent 获取正文 临时放在这里面，做小程序测试api
+func GetContent2(c echo.Context) error {
+	urlStr := c.QueryParam("url")
+
+	info, err := reader.GetContent(urlStr)
+	if err != nil {
+		return c.JSON(http.StatusOK, "0")
+	}
+
+	input := []byte(info.Content)
+	unsafe := blackfriday.MarkdownCommon(input)
+	content := bluemonday.UGCPolicy().SanitizeBytes(unsafe)
+
+	bh := fmt.Sprintf(`
+			<html>
+			<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+			<title>%v</title>
+			<body>
+			%v
+			</body>
+			</html>
+			`, info.Title, string(content[:]))
+
+	g, e := goquery.NewDocumentFromReader(strings.NewReader(bh))
+	if e != nil {
+		return c.JSON(http.StatusOK, "0")
+	}
+	// html := fmt.Sprintf(`<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	// 						<link rel="preload" href="https://yize.gitlab.io/css/main.css" as="style" />
+	// 						%v`, string(content[:]))
+	// return c.HTML(http.StatusOK, html)
+	info.Content = g.Text()
+
+	type Info struct {
+		Title   string        `json:"title"`
+		Content template.HTML `json:"content"`
+		PubAt   string        `json:"pub_at"`
+	}
+
+	return c.JSON(http.StatusOK, Info{
+		info.Title,
+		template.HTML(info.Content),
+		info.PubAt,
+	})
+}
+
+//GetList 获取列表 临时放在这里面，做小程序测试api
+func GetList2(c echo.Context) error {
 	urlStr := c.QueryParam("url")
 	if urlStr == "" {
 		return c.JSON(http.StatusOK, "0")
@@ -387,8 +447,8 @@ func main() {
 
 	e.File("logo.png", "images/80x80logo.png")
 	e.File("favicon.ico", "images/favicon.ico")
-	// e.Logger.Fatal(e.Start(":8005"))
+	e.Logger.Fatal(e.Start(":8005"))
 
-	e.Logger.Fatal(e.StartAutoTLS(":443"))
+	// e.Logger.Fatal(e.StartAutoTLS(":443"))
 
 }

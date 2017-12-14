@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -294,6 +295,9 @@ func GetContent(c echo.Context) error {
 	// 						%v`, string(content[:]))
 	// return c.HTML(http.StatusOK, html)
 	info.Content = fmt.Sprintf(`%v`, string(content[:]))
+
+	// 给图片加上 最大宽度
+	info.Content = strings.Replace(info.Content, `<img src=`, `<img style="max-width:100%" src=`, -1)
 
 	type Info struct {
 		Title   string        `json:"title"`
